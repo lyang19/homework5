@@ -27,3 +27,12 @@ summary(x3)
 ```
 
 
+###for loop
+```{r,include=TRUE}
+varlist<-c(mpg~cyl+wt, mpg~cyl+wt+am, mpg~cyl+wt+hp+qsec)
+for (i in varlist) {
+  print(i)
+  print(lm(i,data = mtcars))
+}
+
+```
