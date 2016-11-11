@@ -9,3 +9,21 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+###In-line Approach
+1) mpg~cyl+wt
+```{r, include=TRUE}
+x1<-lm(mpg~cyl+wt, data = mtcars)
+summary(x1)
+```
+2) mpg~cyl+wt+am
+```{r, include=TRUE}
+x2<-lm(mpg~cyl+wt+am, data = mtcars)
+summary(x2)
+```
+3) mpg~cyl+wt+hp+qsec
+```{r, include=TRUE}
+x3<-lm(mpg~cyl+wt+hp+qsec, data = mtcars)
+summary(x3)
+```
+
+
