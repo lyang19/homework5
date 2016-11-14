@@ -32,7 +32,11 @@ summary(x3)
 varlist<-c(mpg~cyl+wt, mpg~cyl+wt+am, mpg~cyl+wt+hp+qsec)
 for (i in varlist) {
   print(i)
-  print(lm(i,data = mtcars))
+  print(summary(lm(i,data = mtcars)))
+  
 }
+```
+
+```{r}
 
 ```
