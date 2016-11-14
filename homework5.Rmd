@@ -30,13 +30,42 @@ summary(x3)
 ###for loop
 ```{r,include=TRUE}
 varlist<-c(mpg~cyl+wt, mpg~cyl+wt+am, mpg~cyl+wt+hp+qsec)
+list.output<-list()
 for (i in varlist) {
   print(i)
-  print(summary(lm(i,data = mtcars)))
-  
+  lmobj<-lm(i,data = mtcars)
+  print(summary(lmobj))
+  list.output[[length(list.output)+1]]<-lmobj
 }
+anova(list.output[[1]],list.output[[2]])
 ```
 
+###Table driven
 ```{r}
+table<-read.csv(file = 'table.csv')
+table.n<-nrow(table)
+ind<-grep('Valiant',rownames(mtcars),ignore.case = TRUE)
+output<-list()
+for (i in 1:table.n) {
+  fml<-as.formula(paste(table$response[i],'~',table$covariate[i],sep = ''))
+  if(table$model[i]==1){
+    if(table$dataset[i]==1){
+    lm.obj<-lm(fml,data=mtcars)
+    print(lm.obj)
+    output[[length(output)+1]]<-lm.obj}
+    else{lm.obj<-lm(fml,data=mtcars[-ind,])
+    print(lm.obj)
+    output[[length(output)+1]]<-lm.obj}}
 
+  else
+  {
+    if(table$dataset[i]==1){
+    glm.obj<-glm(fml,data=mtcars)
+    print(glm.obj)
+    output[[length(output)+1]]<-glm.obj}
+    else{glm.obj<-glm(fml,data=mtcars)
+    print(glm.obj)
+    output[[length(output)+1]]<-glm.obj}
+  }
+}
 ```
