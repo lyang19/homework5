@@ -31,41 +31,52 @@ summary(x3)
 ```{r,include=TRUE}
 varlist<-c(mpg~cyl+wt, mpg~cyl+wt+am, mpg~cyl+wt+hp+qsec)
 list.output<-list()
+cmts<-c('All coefficients are significant','Coefficient for am is not significant','Coefficients for wt, hp and qsec a are not significant')
+j=0
 for (i in varlist) {
+  j=j+1
   print(i)
   lmobj<-lm(i,data = mtcars)
   print(summary(lmobj))
+  print(cmts[j])
   list.output[[length(list.output)+1]]<-lmobj
 }
 anova(list.output[[1]],list.output[[2]])
+anova(list.output[[1]],list.output[[3]])
 ```
 
+The ANOVA test between 1st and 2nd model shows that the addition of 'am' variable is not significant (p>0.05). Similarly, the ANOVA test between 1st and 3rd model shows that the addition of 'hp' and 'qsec' are not significant (p>0.05). Therefore the preferred model should be the 1st model because it demonstrates a significant correlation between the dependent variables and both the independent variables. 
+
 ###Table driven
-```{r}
+```{r,include=TRUE}
 table<-read.csv(file = 'table.csv')
 table.n<-nrow(table)
 ind<-grep('Valiant',rownames(mtcars),ignore.case = TRUE)
+comment<-c('All coefficients are significant','Coefficient for am is not significant','Coefficients for wt, hp and qsec a are not significant','All coefficients are significant','Coefficient for am is not significant','Coefficient for am is not significant')
 output<-list()
 for (i in 1:table.n) {
   fml<-as.formula(paste(table$response[i],'~',table$covariate[i],sep = ''))
+  print(paste(table$response[i],'~',table$covariate[i],sep = ''))
   if(table$model[i]==1){
     if(table$dataset[i]==1){
     lm.obj<-lm(fml,data=mtcars)
-    print(lm.obj)
+    print(summary(lm.obj))
     output[[length(output)+1]]<-lm.obj}
     else{lm.obj<-lm(fml,data=mtcars[-ind,])
-    print(lm.obj)
+    print(summary(lm.obj))
     output[[length(output)+1]]<-lm.obj}}
 
   else
   {
     if(table$dataset[i]==1){
     glm.obj<-glm(fml,data=mtcars)
-    print(glm.obj)
+    print(summary(glm.obj))
     output[[length(output)+1]]<-glm.obj}
-    else{glm.obj<-glm(fml,data=mtcars)
-    print(glm.obj)
+    else{glm.obj<-glm(fml,data=mtcars[-ind,])
+    print(summary(glm.obj))
     output[[length(output)+1]]<-glm.obj}
   }
+  print(comment[i])
 }
+
 ```
