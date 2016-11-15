@@ -10,22 +10,31 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ###In-line Approach
-1) mpg~cyl+wt
+1) Model 1: mpg~cyl+wt
 ```{r, include=TRUE}
 x1<-lm(mpg~cyl+wt, data = mtcars)
 summary(x1)
 ```
-2) mpg~cyl+wt+am
+ 
+Both coefficients are significant. 
+ 
+2) Model 2: mpg~cyl+wt+am
 ```{r, include=TRUE}
 x2<-lm(mpg~cyl+wt+am, data = mtcars)
 summary(x2)
 ```
-3) mpg~cyl+wt+hp+qsec
+
+Coefficient for am is not significant
+
+3) Model 3: mpg~cyl+wt+hp+qsec.
 ```{r, include=TRUE}
 x3<-lm(mpg~cyl+wt+hp+qsec, data = mtcars)
 summary(x3)
 ```
 
+Coefficients for wt, hp and qsec a are not significant.
+
+The 2nd and the 3rd model have additional independent variables based on model 1, but the coefficient for the additional variables are not significant. Therefore the 1st model demonstrates the strongest linear correlation. 
 
 ###for loop
 ```{r,include=TRUE}
@@ -45,7 +54,7 @@ anova(list.output[[1]],list.output[[2]])
 anova(list.output[[1]],list.output[[3]])
 ```
 
-The ANOVA test between 1st and 2nd model shows that the addition of 'am' variable is not significant (p>0.05). Similarly, the ANOVA test between 1st and 3rd model shows that the addition of 'hp' and 'qsec' are not significant (p>0.05). Therefore the preferred model should be the 1st model because it demonstrates a significant correlation between the dependent variables and both the independent variables. 
+The ANOVA test between 1st and 2nd model shows that the addition of 'am' variable is not significant (p>0.05). Similarly, the ANOVA test between 1st and 3rd model shows that the addition of 'hp' and 'qsec' are not significant. The test results follow the mannual comparisons made in part 1. Therefore the preferred model should be the 1st model because it demonstrates a significant correlation between the dependent variables and both the independent variables. 
 
 ###Table driven
 ```{r,include=TRUE}
@@ -80,3 +89,5 @@ for (i in 1:table.n) {
 }
 
 ```
+
+The first 3 models are just repetitions. The 4th model employs a square root transformation of mpg to the model, and apparently it increases the linearality as it increases the significance of coefficient of cyl, and also increases R-squared which implies a stronger trend. 5th model employs glm instead of lm, but got the same coefficients. For glm() function, if you don't specify the link function and error, its default is the same as the lm() function, which assumes f(Y)=y and the error's distribution is normal. If my PI asks me to do glm() instead of lm(), it might be that he knows the distribution of original data doesn't fit the default of lm(). 6th model is a repetition of 5th with the 'Valiant' automobile removed. The removal doesn't seem to impact the linear model significantly. 
